@@ -3,8 +3,8 @@ import * as asyncAPI from "pareto-async-api"
 import * as asyncLib from "pareto-async-lib"
 import * as fsLib from "pareto-filesystem-lib"
 
-import { createLeafProcessCall } from "./asyncFunctions/process"
-import { createLeafHTTPSCaller } from "./asyncFunctions/https"
+import { createLeafProcessCall } from "pareto-process-lib"
+import { createLeafHTTPSCaller } from "pareto-https-lib"
 
 export type Part = {
     isPublic: boolean
