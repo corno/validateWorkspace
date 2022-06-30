@@ -1,6 +1,6 @@
 import { Async } from "./async";
 import { createCounter } from "./createCounter";
-import { createDictionary, IDictionary } from "./dictionary";
+import { createDictionary, IDictionary } from "../dictionary";
 
 export function createDictionaryMapper<T, NT>(
     dictionary: IDictionary<T>,

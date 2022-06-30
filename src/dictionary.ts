@@ -9,7 +9,7 @@ export type IDictionary<T> = {
 export function createDictionary<T>(source: { [key: string]: T }): IDictionary<T> {
     return {
         forEach: (cb) => {
-            Object.keys(source).forEach($ => {
+            Object.keys(source).sort().forEach($ => {
                 cb(source[$], $)
             })
         },

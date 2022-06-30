@@ -1,13 +1,13 @@
 
 import { createDictionary, IDictionary } from "./dictionary"
-import { createCompositeDirReader, createCompositeFileReader, createLeafFileReader, rewrite } from "./readdir"
-import { create2Tuple, create3Tuple, Tuple2 } from "./tuple"
-import { createLeafProcessCall } from "./process"
-import { createLeafHTTPSCaller } from "./https"
-import { createLeafSyncCaller } from "./sync"
-import { Async } from "./async"
-import { createCache } from "./cache"
-import { createDictionaryMapper } from "./createDictionaryMapper"
+import { createCompositeDirReader, createCompositeFileReader, createLeafFileReader, rewrite } from "./asyncFunctions/readdir"
+import { create2Tuple, create3Tuple, Tuple2 } from "./asyncFunctions/tuple"
+import { createLeafProcessCall } from "./asyncFunctions/process"
+import { createLeafHTTPSCaller } from "./asyncFunctions/https"
+import { createLeafSyncCaller } from "./asyncFunctions/sync"
+import { Async } from "./asyncFunctions/async"
+import { createCache } from "./asyncFunctions/cache"
+import { createDictionaryMapper } from "./asyncFunctions/createDictionaryMapper"
 
 export type Part = {
     isPublic: boolean
@@ -106,7 +106,7 @@ export function getData(
                 return rewrite<Project, Tuple2<boolean, IDictionary<Part>>>(
                     create2Tuple<boolean, IDictionary<Part>>(
                         createLeafProcessCall<boolean>(
-                            `git -C ${projectDir.path} diff`,
+                            `git -C ${projectDir.path} diff --exit-code && git -C ${projectDir.path} log origin/master..master --exit-code`,
                             (cleanstdout) => {
                                 return cleanstdout.trimEnd() === ""
                             },

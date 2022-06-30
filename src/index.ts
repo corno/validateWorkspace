@@ -36,6 +36,7 @@ type Part = {
     version: null | string
     contentFingerprint: null | string
     status: PartStatus
+    dependenciesClean: boolean
     dependencies: IDictionary<Dependency>
     devDependencies: IDictionary<Dependency>
 }
@@ -61,6 +62,7 @@ getData(
                         return {
                             dependencies: createDictionary({}),
                             devDependencies: createDictionary({}),
+                            dependenciesClean: true,
                             status: ["missing package", {}],
                             version: null,
                             contentFingerprint: null,
@@ -83,7 +85,6 @@ getData(
                                         return ["clean", {}]
                                     }
                                 })(),
-                                isClean: false,
                             }
                         })
                     }
@@ -110,9 +111,9 @@ getData(
                         isPublic: part.isPublic,
                         version: part.packageData.version,
                         contentFingerprint: part.packageData.contentFingerprint,
-                        isClean:
-                            status[0] === "clean" &&
-                            deps.toArray().map($ => $.value.status[0] === "clean").reduce((a, b) => a && b, true)
+                        dependenciesClean:
+                            deps.toArray().map($ => $.value.status[0] === "clean").reduce((a, b) => a && b, true) &&
+                            devDeps.toArray().map($ => $.value.status[0] === "clean").reduce((a, b) => a && b, true)
                     }
                     // if (part.packageData === null) {
                     //     console.log(`\tNO PACKAGE DATA`)
@@ -131,7 +132,7 @@ getData(
                     gitClean: project.gitClean,
                     isClean:
                         project.gitClean &&
-                        parts.toArray().map($ => { return $.value.status[0] === "clean" }).reduce((previous, current) => previous && current, true)
+                        parts.toArray().map($ => { return $.value.status[0] === "clean" && $.value.dependenciesClean }).reduce((previous, current) => previous && current, true)
                 }
 
             })
@@ -161,7 +162,7 @@ getData(
 
             project.parts.forEach((part, partName) => {
                 if (part.isPublic) {
-                    console.log(`\t\t"${projectName}-${partName}" [ color="${part.status[0] !== "clean" ? `red` : `green`}"${partName === "api" ? `, style="filled"` : ""} ]`)
+                    console.log(`\t\t"${projectName}-${partName}" [ color="${part.status[0] !== "clean" || !part.dependenciesClean ? `red` : `green`}"${partName === "api" ? `, style="filled"` : ""} ]`)
                 }
             })
             console.log(`\t}`)
@@ -171,7 +172,7 @@ getData(
             project.parts.forEach((part, partName) => {
                 if (part.isPublic) {
                     part.dependencies.forEach((v, depName) => {
-                        if (depName !== "pareto-runtime") {
+                        if (depName !== "pareto-lang-api" && depName !== "pareto-lang-lib") {
                             console.log(`\t"${projectName}-${partName}" -> "${depName}"`)
                         }
                     })

@@ -1,7 +1,7 @@
 
 import * as fs from "fs"
 import { createCounter } from "./createCounter"
-import { createDictionary, IDictionary } from "./dictionary"
+import { createDictionary, IDictionary } from "../dictionary"
 import * as pth from "path"
 import { Async } from "./async"
 
