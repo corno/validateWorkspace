@@ -1,13 +1,10 @@
 
-import { createDictionary, IDictionary } from "./dictionary"
-import { createCompositeDirReader, createCompositeFileReader, createLeafFileReader, rewrite } from "./asyncFunctions/readdir"
-import { create2Tuple, create3Tuple, Tuple2 } from "./asyncFunctions/tuple"
+import * as asyncAPI from "pareto-async-api"
+import * as asyncLib from "pareto-async-lib"
+import * as fsLib from "pareto-filesystem-lib"
+
 import { createLeafProcessCall } from "./asyncFunctions/process"
 import { createLeafHTTPSCaller } from "./asyncFunctions/https"
-import { createLeafSyncCaller } from "./asyncFunctions/sync"
-import { Async } from "./asyncFunctions/async"
-import { createCache } from "./asyncFunctions/cache"
-import { createDictionaryMapper } from "./asyncFunctions/createDictionaryMapper"
 
 export type Part = {
     isPublic: boolean
@@ -16,19 +13,19 @@ export type Part = {
 
 export type Project = {
     gitClean: boolean
-    parts: IDictionary<Part>
+    parts: asyncAPI.IDictionary<Part>
 }
 
 export type Overview = {
-    projects: IDictionary<Project>
+    projects: asyncAPI.IDictionary<Project>
 }
 
 export type PackageData = {
     name: string | null,
     version: string | null,
     contentFingerprint: string | null,
-    dependencies: IDictionary<Depencency>
-    devDependencies: IDictionary<Depencency>
+    dependencies: asyncAPI.IDictionary<Depencency>
+    devDependencies: asyncAPI.IDictionary<Depencency>
     remote: RemoteData | null
 }
 
@@ -45,7 +42,7 @@ export type Depencency = {
 
 function createRegistryDataGetter(
     name: string
-): Async<RemoteData | null> {
+): asyncAPI.IAsync<RemoteData | null> {
 
     let data = ""
     let hasError = false
@@ -93,18 +90,18 @@ export function getData(
     callback: (o: Overview) => void,
 ) {
 
-    const registryCache = createCache(
+    const registryCache = asyncLib.createCache(
         (key) => {
             return createRegistryDataGetter(key)
         }
     )
 
-    rewrite<Overview, IDictionary<Project>>(
-        createCompositeDirReader<Project>(
+    asyncLib.rewrite<Overview, asyncAPI.IDictionary<Project>>(
+        fsLib.createCompositeDirReader<Project>(
             rootDir,
             (projectDir) => {
-                return rewrite<Project, Tuple2<boolean, IDictionary<Part>>>(
-                    create2Tuple<boolean, IDictionary<Part>>(
+                return asyncLib.rewrite<Project, asyncAPI.Tuple2<boolean, asyncAPI.IDictionary<Part>>>(
+                    asyncLib.create2Tuple<boolean, asyncAPI.IDictionary<Part>>(
                         createLeafProcessCall<boolean>(
                             `git -C ${projectDir.path} diff --exit-code && git -C ${projectDir.path} log origin/master..master --exit-code`,
                             (cleanstdout) => {
@@ -114,7 +111,7 @@ export function getData(
                                 return false
                             },
                         ),
-                        createCompositeDirReader<Part>(
+                        fsLib.createCompositeDirReader<Part>(
                             projectDir.path,
                             (partDir) => {
                                 if ([
@@ -127,16 +124,16 @@ export function getData(
                                 ].indexOf(partDir.name) === -1) {
                                     return null
                                 } else {
-                                    return createCompositeFileReader<Part>(
+                                    return fsLib.createCompositeFileReader<Part>(
                                         [partDir.path, `package.json`],
                                         (data) => {
                                             const pkg = JSON.parse(data)
 
                                             function resolveDependencies(source: any) {
-                                                return createDictionaryMapper<string, Depencency>(
-                                                    createDictionary<string>(source === undefined ? {} : source),
+                                                return asyncLib.createDictionaryMapper<string, Depencency>(
+                                                    asyncLib.createDictionary<string>(source === undefined ? {} : source),
                                                     (v, k) => {
-                                                        return rewrite(
+                                                        return asyncLib.rewrite(
                                                             registryCache.getEntry(k),
                                                             ($) => {
                                                                 return {
@@ -150,12 +147,12 @@ export function getData(
                                                 )
                                             }
 
-                                            return rewrite(
-                                                create3Tuple<IDictionary<Depencency>, IDictionary<Depencency>, RemoteData | null>(
+                                            return asyncLib.rewrite(
+                                                asyncLib.create3Tuple<asyncAPI.IDictionary<Depencency>, asyncAPI.IDictionary<Depencency>, RemoteData | null>(
                                                     resolveDependencies(pkg.dependencies),
                                                     resolveDependencies(pkg.devDependencies),
                                                     pkg.name === undefined
-                                                        ? createLeafSyncCaller(null)
+                                                        ? asyncLib.createLeafSyncCaller(null)
                                                         : registryCache.getEntry(pkg.name)
 
                                                 ),
@@ -175,7 +172,7 @@ export function getData(
                                             )
                                         },
                                         () => {
-                                            return createLeafSyncCaller({
+                                            return asyncLib.createLeafSyncCaller({
                                                 isPublic: ["api", "lib", "bin"].indexOf(partDir.name) !== 1,
                                                 packageData: null
                                             })

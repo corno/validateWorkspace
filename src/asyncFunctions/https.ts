@@ -1,5 +1,6 @@
 import * as https from "https"
-import { Async } from "./async"
+import * as asyncAPI from "pareto-async-api"
+import * as asyncLib from "pareto-async-lib"
 
 export function createLeafHTTPSCaller<T>(
     hostname: string,
@@ -7,7 +8,7 @@ export function createLeafHTTPSCaller<T>(
     onData: (data: string) => void,
     onError: (e: Error) => void,
     onEnd: () => T
-): Async<T> {
+): asyncAPI.IAsync<T> {
     return {
         execute: (cb) => {
             const options = {

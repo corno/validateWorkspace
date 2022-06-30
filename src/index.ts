@@ -1,4 +1,7 @@
-import { createDictionary, IDictionary } from "./dictionary"
+
+import * as asyncAPI from "pareto-async-api"
+import * as asyncLib from "pareto-async-lib"
+
 import { Depencency as D, getData } from "./getData"
 
 const red = "\x1b[31m"
@@ -15,11 +18,11 @@ if (rootDir === undefined) {
 }
 
 type Overview = {
-    projects: IDictionary<Project>
+    projects: asyncAPI.IDictionary<Project>
 }
 
 type Project = {
-    parts: IDictionary<Part>
+    parts: asyncAPI.IDictionary<Part>
     gitClean: boolean
     isClean: boolean
 }
@@ -37,8 +40,8 @@ type Part = {
     contentFingerprint: null | string
     status: PartStatus
     dependenciesClean: boolean
-    dependencies: IDictionary<Dependency>
-    devDependencies: IDictionary<Dependency>
+    dependencies: asyncAPI.IDictionary<Dependency>
+    devDependencies: asyncAPI.IDictionary<Dependency>
 }
 
 type DepencencyStatus =
@@ -57,11 +60,11 @@ getData(
     (res) => {
         const o: Overview = {
             projects: res.projects.map((project, projectName) => {
-                const parts: IDictionary<Part> = project.parts.map<Part>((part, partName) => {
+                const parts: asyncAPI.IDictionary<Part> = project.parts.map<Part>((part, partName) => {
                     if (part.packageData === null) {
                         return {
-                            dependencies: createDictionary({}),
-                            devDependencies: createDictionary({}),
+                            dependencies: asyncLib.createDictionary({}),
+                            devDependencies: asyncLib.createDictionary({}),
                             dependenciesClean: true,
                             status: ["missing package", {}],
                             version: null,
@@ -70,7 +73,7 @@ getData(
                             isPublic: part.isPublic,
                         }
                     }
-                    function processDeps(deps: IDictionary<D>): IDictionary<Dependency> {
+                    function processDeps(deps: asyncAPI.IDictionary<D>): asyncAPI.IDictionary<Dependency> {
                         return deps.map<Dependency>((v, k) => {
 
                             return {

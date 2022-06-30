@@ -1,11 +1,12 @@
 import * as cp from "child_process"
-import { Async } from "./async"
+import * as asyncAPI from "pareto-async-api"
+import * as asyncLib from "pareto-async-lib"
 
 export function createLeafProcessCall<T>(
     command: string,
     onResult: (stdout: string) => T,
     onError: (err: cp.ExecException, stderr: string) => T,
-): Async<T> {
+): asyncAPI.IAsync<T> {
     return {
         execute: (cb) => {
             cp.exec(
@@ -24,9 +25,9 @@ export function createLeafProcessCall<T>(
 
 export function createCompositeProcessCall<T>(
     command: string,
-    onResult: (stdout: string) => Async<T>,
-    onError: (err: cp.ExecException, stderr: string) => Async<T>,
-): Async<T> {
+    onResult: (stdout: string) => asyncAPI.IAsync<T>,
+    onError: (err: cp.ExecException, stderr: string) => asyncAPI.IAsync<T>,
+): asyncAPI.IAsync<T> {
     return {
         execute: (cb) => {
             cp.exec(
