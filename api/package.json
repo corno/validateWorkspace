@@ -1,0 +1,26 @@
+{
+  "author": "Corno",
+  "dependencies": {
+    "pareto-async-api": "^0.4.0"
+  },
+  "files": [
+    "dist",
+    "data"
+  ],
+  "keywords": [],
+  "main": "./dist/index.js",
+  "bugs": {
+    "url": "https://github.com/corno/pareto/issues"
+  },
+  "description": "",
+  "homepage": "https://github.com/corno/pareto#readme",
+  "license": "ISC",
+  "name": "pareto-validate-workspace-api",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/corno/pareto-validate-workspace.git"
+  },
+  "types": "dist/index.d.ts",
+  "version": "0.1.0",
+  "content-fingerprint": "9797bec0ccccf1d2b063797671fa2314106ef932"
+}
