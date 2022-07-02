@@ -1,4 +1,4 @@
-import { API } from "./api";
+import { API } from "pareto-validate-workspace-api";
 import { getData } from "./getData";
 
 import * as async from "pareto-async-lib"
