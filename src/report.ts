@@ -1,9 +1,7 @@
 
 import * as asyncAPI from "pareto-async-api"
 import * as asyncLib from "pareto-async-lib"
-import * as data from "./getData"
-
-import { Depencency as D } from "./getData"
+import * as types from "./types"
 
 const red = "\x1b[31m"
 const green = "\x1b[32m"
@@ -49,7 +47,7 @@ type Dependency = {
     status: DepencencyStatus
 }
 
-export function report(res: data.Overview) {
+export function report(res: types.Overview) {
 
     const o: Overview = {
         projects: res.projects.map((project, projectName) => {
@@ -66,7 +64,7 @@ export function report(res: data.Overview) {
                         isPublic: part.isPublic,
                     }
                 }
-                function processDeps(deps: asyncAPI.IDictionary<D>): asyncAPI.IDictionary<Dependency> {
+                function processDeps(deps: asyncAPI.IDictionary<types.Depencency>): asyncAPI.IDictionary<Dependency> {
                     return deps.map<Dependency>((v, k) => {
 
                         return {
