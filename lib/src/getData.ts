@@ -1,6 +1,5 @@
 
 import * as api from "pareto-validate-workspace-api"
-import * as types from "./types"
 
 import * as asyncAPI from "pareto-async-api"
 import * as httpsAPI from "pareto-https-api"
@@ -21,12 +20,12 @@ export function getData(
     function getDataImp(
         rootDir: string,
         error: (message: string) => void,
-    ): asyncAPI.IAsync<types.Overview> {
+    ): asyncAPI.IAsync<api.Overview> {
         const registryCache = libs.async.createCache(
             (key) => {
                 let data = ""
                 let hasError = false
-                return libs.https.call<types.RemoteData | null>(
+                return libs.https.call<api.RemoteData | null>(
                     'registry.npmjs.org',
                     `/${key}`,
                     (d) => {
@@ -71,12 +70,12 @@ export function getData(
             }
         )
     
-        return libs.async.rewrite<types.Overview, asyncAPI.IDictionary<types.Project>>(
-            libs.fs.directory<types.Project>(
+        return libs.async.rewrite<api.Overview, asyncAPI.IDictionary<api.Project>>(
+            libs.fs.directory<api.Project>(
                 rootDir,
                 (projectDir) => {
-                    return libs.async.rewrite<types.Project, asyncAPI.Tuple2Result<boolean, asyncAPI.IDictionary<types.Part>>>(
-                        libs.async.tuple2<boolean, asyncAPI.IDictionary<types.Part>>(
+                    return libs.async.rewrite<api.Project, asyncAPI.Tuple2Result<boolean, asyncAPI.IDictionary<api.Part>>>(
+                        libs.async.tuple2<boolean, asyncAPI.IDictionary<api.Part>>(
                             libs.process.call<boolean>(
                                 `git -C ${projectDir.path} diff --exit-code && git -C ${projectDir.path} log origin/master..master --exit-code`,
                                 {
@@ -88,7 +87,7 @@ export function getData(
                                     }
                                 },
                             ),
-                            libs.fs.directory<types.Part>(
+                            libs.fs.directory<api.Part>(
                                 projectDir.path,
                                 (partDir) => {
                                     if ([
@@ -101,13 +100,13 @@ export function getData(
                                     ].indexOf(partDir.name) === -1) {
                                         return null
                                     } else {
-                                        return libs.fs.file<types.Part>(
+                                        return libs.fs.file<api.Part>(
                                             [partDir.path, `package.json`],
                                             (data) => {
                                                 const pkg = pr.JSONparse(data)
     
                                                 function resolveDependencies(rawJSONDependencies: any) {
-                                                    return libs.async.dictionary<types.Depencency>(
+                                                    return libs.async.dictionary<api.Depencency>(
                                                         libs.async.createDictionary<string>(rawJSONDependencies === undefined ? {} : rawJSONDependencies).map((v, k) => {
                                                             return libs.async.rewrite(
                                                                 registryCache.getEntry(k),
@@ -124,7 +123,7 @@ export function getData(
                                                 }
     
                                                 return libs.async.rewrite(
-                                                    libs.async.tuple3<asyncAPI.IDictionary<types.Depencency>, asyncAPI.IDictionary<types.Depencency>, types.RemoteData | null>(
+                                                    libs.async.tuple3<asyncAPI.IDictionary<api.Depencency>, asyncAPI.IDictionary<api.Depencency>, api.RemoteData | null>(
                                                         resolveDependencies(pkg.dependencies),
                                                         resolveDependencies(pkg.devDependencies),
                                                         pkg.name === undefined
@@ -132,7 +131,7 @@ export function getData(
                                                             : registryCache.getEntry(pkg.name)
     
                                                     ),
-                                                    ($): types.Part => {
+                                                    ($): api.Part => {
                                                         return {
                                                             isPublic: ["api", "lib", "bin"].indexOf(partDir.name) !== -1,
                                                             packageData: {

@@ -1,7 +1,7 @@
 
 import * as asyncAPI from "pareto-async-api"
 import * as asyncLib from "pareto-async-lib"
-import * as types from "./types"
+import * as api from "pareto-validate-workspace-api"
 
 const red = "\x1b[31m"
 const green = "\x1b[32m"
@@ -50,7 +50,7 @@ type Dependency = {
 
 export function report() {
     return function (
-        res: types.Overview,
+        res: api.Overview,
         console: {
             log: (message: string) => void
         }
@@ -71,7 +71,7 @@ export function report() {
                             isPublic: part.isPublic,
                         }
                     }
-                    function processDeps(deps: asyncAPI.IDictionary<types.Depencency>): asyncAPI.IDictionary<Dependency> {
+                    function processDeps(deps: asyncAPI.IDictionary<api.Depencency>): asyncAPI.IDictionary<Dependency> {
                         return deps.map<Dependency>((v, k) => {
 
                             return {
