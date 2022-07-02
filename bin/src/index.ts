@@ -1,21 +1,32 @@
-import { API } from "./api";
-import { getData } from "./getData";
+import { init } from "pareto-validate-workspace-lib"
 
-import * as async from "pareto-async-lib"
-import * as https from "pareto-https-lib"
-import * as fs from "pareto-filesystem-lib"
-import * as prcs from "pareto-process-lib"
-import { report } from "./report";
+import * as pr from "pareto-runtime"
 
-export function init(): API {
-    return {
-        getData: getData({
-            fs: fs.init(async.init()),
-            https: https.init(),
-            async: async.init(),
-            process: prcs.init(),
 
-        }),
-        report: report()
+pr.runProgram(($$) => {
+
+    const rootDir = $$.argument
+
+    if (rootDir === undefined) {
+        throw new Error("Missing param")
     }
-}
+
+    const $ = init()
+
+    $.getData(
+        rootDir,
+        (msg) => {
+            pr.logError(msg)
+        }
+    ).execute((res) => {
+        $.report(
+            res,
+            {
+                log: (msg) => {
+                    pr.log(msg)
+                }
+            },
+        )
+    })
+
+})

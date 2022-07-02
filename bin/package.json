@@ -7,11 +7,28 @@
     "pareto-https-lib": "^0.4.0",
     "pareto-process-api": "^0.2.1",
     "pareto-process-lib": "^0.4.0",
-    "pareto-runtime": "^0.23.0"
+    "pareto-runtime": "^0.23.0",
+    "pareto-validate-workspace-lib": "^0.1.0"
   },
-  "devDependencies": {
-    "@types/node": "^18.0.0"
+  "author": "Corno",
+  "files": [
+    "dist",
+    "data"
+  ],
+  "keywords": [],
+  "main": "./dist/index.js",
+  "bugs": {
+    "url": "https://github.com/corno/pareto/issues"
   },
+  "description": "",
+  "homepage": "https://github.com/corno/pareto#readme",
+  "license": "ISC",
+  "name": "pareto-validate-workspace-api",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/corno/pareto-validate-workspace.git"
+  },
+  "types": "dist/index.d.ts",
   "version": "0.0.0",
-  "content-fingerprint": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+  "content-fingerprint": "5eaac58bff03e7de33ab6356b69dc5b37bfca6d7"
 }
