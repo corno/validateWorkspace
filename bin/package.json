@@ -30,5 +30,5 @@
   "bin": {
     "validate-workspace": "dist/bin/validate.js"
   },
-  "content-fingerprint": "37b4c0e2827eee4d40ba363bd01c02bcc554fcd4"
+  "content-fingerprint": "02f263bdb9459da8b3b5eb485e7f63273fd448f4"
 }
