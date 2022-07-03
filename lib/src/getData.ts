@@ -1,5 +1,5 @@
 
-import * as api from "./types"
+import * as api from "pareto-validate-workspace-api"
 
 import * as asyncAPI from "pareto-async-api"
 import * as httpsAPI from "pareto-https-api"

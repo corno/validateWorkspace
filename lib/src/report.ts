@@ -1,6 +1,6 @@
 
 import * as asyncAPI from "pareto-async-api"
-import * as api from "./types"
+import * as api from "pareto-validate-workspace-api"
 
 const red = "\x1b[31m"
 const green = "\x1b[32m"
