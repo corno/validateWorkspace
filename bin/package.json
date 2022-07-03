@@ -2,7 +2,7 @@
   "dependencies": {
     "pareto-async-lib": "^0.5.1",
     "pareto-filesystem-lib": "^0.13.1",
-    "pareto-https-lib": "^0.4.0",
+    "pareto-https-lib": "^0.5.0",
     "pareto-process-lib": "^0.4.2",
     "pareto-runtime": "^0.23.0",
     "pareto-validate-workspace-lib": "^0.1.2"
