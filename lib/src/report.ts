@@ -172,6 +172,8 @@ export function report() {
 
         console.log(``)
         console.log(`digraph G {`)
+        console.log(`\trankdir="LR"`)
+        
         o.projects.forEach((project, projectName) => {
             console.log(`\tsubgraph cluster_${i++} {`)
 
