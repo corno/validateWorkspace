@@ -20,12 +20,12 @@
   "description": "",
   "homepage": "https://github.com/corno/pareto#readme",
   "license": "ISC",
-  "name": "pareto-validate-workspace-api",
+  "name": "pareto-validate-workspace-bin",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/corno/pareto-validate-workspace.git"
   },
   "types": "dist/index.d.ts",
   "version": "0.0.0",
-  "content-fingerprint": "7c32f4f2fe96d046a9c6bd3a9967603450441a33"
+  "content-fingerprint": "329645b9d5663729cec62d2b062223ecd7e8e034"
 }
