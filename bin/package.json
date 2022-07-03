@@ -27,5 +27,8 @@
   },
   "types": "dist/index.d.ts",
   "version": "0.0.0",
-  "content-fingerprint": "329645b9d5663729cec62d2b062223ecd7e8e034"
+  "bin": {
+    "validate-workspace": "dist/bin/validate.js"
+  },
+  "content-fingerprint": "37b4c0e2827eee4d40ba363bd01c02bcc554fcd4"
 }
