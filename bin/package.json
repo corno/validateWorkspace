@@ -5,8 +5,8 @@
     "pareto-filesystem-api": "^0.1.0",
     "pareto-filesystem-lib": "^0.13.0",
     "pareto-https-lib": "^0.4.0",
-    "pareto-process-api": "^0.2.1",
-    "pareto-process-lib": "^0.4.0",
+    "pareto-process-api": "^0.2.2",
+    "pareto-process-lib": "^0.4.2",
     "pareto-runtime": "^0.23.0",
     "pareto-validate-workspace-lib": "^0.1.0"
   },
@@ -30,5 +30,5 @@
   },
   "types": "dist/index.d.ts",
   "version": "0.0.0",
-  "content-fingerprint": "5eaac58bff03e7de33ab6356b69dc5b37bfca6d7"
+  "content-fingerprint": "7f16baca984beca31a8c9e1bcbfd9e368c343022"
 }

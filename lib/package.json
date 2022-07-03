@@ -1,12 +1,9 @@
 {
   "dependencies": {
     "pareto-async-api": "^0.4.0",
-    "pareto-async-lib": "^0.5.1",
     "pareto-filesystem-api": "^0.1.0",
-    "pareto-filesystem-lib": "^0.13.0",
-    "pareto-https-lib": "^0.4.0",
-    "pareto-process-api": "^0.2.1",
-    "pareto-process-lib": "^0.4.0",
+    "pareto-https-api": "^0.2.0",
+    "pareto-process-api": "^0.2.2",
     "pareto-runtime": "^0.23.0",
     "pareto-validate-workspace-api": "^0.3.0"
   },
@@ -33,5 +30,5 @@
     "url": "git+https://github.com/corno/pareto-validate-workspace.git"
   },
   "types": "dist/index.d.ts",
-  "content-fingerprint": "eaea1696b8e31159358a2e2e119076a239725c07"
+  "content-fingerprint": "737b27ec532d53dc5243dee80aec08cef82c5cd3"
 }

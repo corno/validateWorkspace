@@ -1,6 +1,5 @@
 
 import * as asyncAPI from "pareto-async-api"
-import * as asyncLib from "pareto-async-lib"
 import * as api from "pareto-validate-workspace-api"
 
 const red = "\x1b[31m"
@@ -56,13 +55,28 @@ export function report() {
         }
     ) {
 
+
+        function tempCreateEmptyDictionary<T>(): asyncAPI.IDictionary<T> {
+            return {
+                forEach: () => {
+
+                },
+                map: () => {
+                    return tempCreateEmptyDictionary()
+                },
+                toArray: () => {
+                    return []
+                },
+            }
+        }
+
         const o: Overview = {
             projects: res.projects.map((project, projectName) => {
                 const parts: asyncAPI.IDictionary<Part> = project.parts.map<Part>((part, partName) => {
                     if (part.packageData === null) {
                         return {
-                            dependencies: asyncLib.init().createDictionary({}),
-                            devDependencies: asyncLib.init().createDictionary({}),
+                            dependencies: tempCreateEmptyDictionary(),
+                            devDependencies: tempCreateEmptyDictionary(),
                             dependenciesClean: true,
                             status: ["missing package", {}],
                             version: null,
