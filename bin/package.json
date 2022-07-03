@@ -1,14 +1,11 @@
 {
   "dependencies": {
-    "pareto-async-api": "^0.4.0",
     "pareto-async-lib": "^0.5.1",
-    "pareto-filesystem-api": "^0.1.0",
-    "pareto-filesystem-lib": "^0.13.0",
+    "pareto-filesystem-lib": "^0.13.1",
     "pareto-https-lib": "^0.4.0",
-    "pareto-process-api": "^0.2.2",
     "pareto-process-lib": "^0.4.2",
     "pareto-runtime": "^0.23.0",
-    "pareto-validate-workspace-lib": "^0.1.0"
+    "pareto-validate-workspace-lib": "^0.1.1"
   },
   "author": "Corno",
   "files": [
@@ -30,5 +27,5 @@
   },
   "types": "dist/index.d.ts",
   "version": "0.0.0",
-  "content-fingerprint": "7f16baca984beca31a8c9e1bcbfd9e368c343022"
+  "content-fingerprint": "3606ef496f5a9d45660f553e4a9369cff69f5e03"
 }
