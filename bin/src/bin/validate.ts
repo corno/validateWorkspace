@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { init } from "pareto-validate-workspace-lib"
 
 import * as pr from "pareto-runtime"
