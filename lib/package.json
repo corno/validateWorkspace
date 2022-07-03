@@ -7,7 +7,7 @@
     "pareto-runtime": "^0.23.0",
     "pareto-validate-workspace-api": "^0.3.2"
   },
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Corno",
   "files": [
     "dist",
