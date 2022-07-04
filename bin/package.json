@@ -5,7 +5,7 @@
     "pareto-https-lib": "^0.6.0",
     "pareto-process-lib": "^0.5.0",
     "pareto-runtime": "^0.23.0",
-    "pareto-validate-workspace-lib": "^0.2.0"
+    "pareto-validate-workspace-lib": "^0.3.0"
   },
   "author": "Corno",
   "files": [
