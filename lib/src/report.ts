@@ -72,7 +72,7 @@ export function report() {
                         }
                     }
                     function processDeps(deps: pa.IReadonlyDictionary<api.Depencency>): pa.IReadonlyDictionary<Dependency> {
-                        return deps.map<Dependency>((v, k) => {
+                        return deps.map<Dependency>((v) => {
 
                             return {
                                 version: v.version,
@@ -120,10 +120,10 @@ export function report() {
                     //     console.log(`\tNO PACKAGE DATA`)
                     // } else {
                     //     console.log(`\t\t>${part.packageData.name} ${part.packageData.version} ${part.packageData.contentFingerprint}`)
-                    //     part.packageData.dependencies.forEach((v, k) => {
+                    //     part.packageData.dependencies.forEach(v) => {
                     //         console.log(`\t\t${k} -> ${v.version}`)
                     //     })
-                    //     part.packageData.devDependencies.forEach((v, k) => {
+                    //     part.packageData.devDependencies.forEach((v) => {
                     //         console.log(`\t\t${k} -> ${v.version}`)
                     //     })
                     // }
@@ -172,11 +172,11 @@ export function report() {
         })
         o.projects.toArray().forEach((project) => {
 
-            project.value.parts.toArray().forEach((part, partName) => {
+            project.value.parts.toArray().forEach((part) => {
                 if (part.value.isPublic) {
                     part.value.dependencies.toArray().forEach((v) => {
                         if (v.key !== "pareto-lang-api" && v.key !== "pareto-lang-lib") {
-                            console.log(`\t"${project.key}-${partName}" -> "${v.key}"`)
+                            console.log(`\t"${project.key}-${part.key}" -> "${v.key}"`)
                         }
                     })
                     part.value.devDependencies.toArray().forEach((v) => {
@@ -190,13 +190,13 @@ export function report() {
 
         // const referencedPackages: { [key: string]: null } = {}
 
-        // res.projects.forEach((project, key) => {
-        //     project.parts.forEach((part, key) => {
+        // res.projects.forEach((project) => {
+        //     project.parts.forEach((part) => {
         //         if (part.packageData !== null) {
-        //             part.packageData.dependencies.forEach((v, k) => {
+        //             part.packageData.dependencies.forEach((v) => {
         //                 referencedPackages[k] = null
         //             })
-        //             part.packageData.devDependencies.forEach((v, k) => {
+        //             part.packageData.devDependencies.forEach((v) => {
         //                 referencedPackages[k] = null
         //             })
         //         }

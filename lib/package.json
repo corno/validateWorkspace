@@ -29,5 +29,5 @@
     "url": "git+https://github.com/corno/pareto-validate-workspace.git"
   },
   "types": "dist/index.d.ts",
-  "content-fingerprint": "f5193a1ec605a6ad1ad5a130145f2db3006f1dc8"
+  "content-fingerprint": "2d35c1812fcfc244f5da484d86bda6c624fbb9ea"
 }
