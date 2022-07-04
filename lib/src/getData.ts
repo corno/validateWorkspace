@@ -1,6 +1,8 @@
 
 import * as api from "pareto-validate-workspace-api"
 
+import * as pa from "pareto-lang-api"
+import * as pl from "pareto-lang-lib"
 import * as asyncAPI from "pareto-async-api"
 import * as httpsAPI from "pareto-https-api"
 import * as fsAPI from "pareto-filesystem-api"
@@ -70,12 +72,12 @@ export function getData(
             }
         )
     
-        return libs.async.rewrite<api.Overview, asyncAPI.IDictionary<api.Project>>(
+        return libs.async.rewrite<api.Overview, pa.IReadonlyDictionary<api.Project>>(
             libs.fs.directory<api.Project>(
                 rootDir,
                 (projectDir) => {
-                    return libs.async.rewrite<api.Project, asyncAPI.Tuple2Result<boolean, asyncAPI.IDictionary<api.Part>>>(
-                        libs.async.tuple2<boolean, asyncAPI.IDictionary<api.Part>>(
+                    return libs.async.rewrite<api.Project, asyncAPI.Tuple2Result<boolean, pa.IReadonlyDictionary<api.Part>>>(
+                        libs.async.tuple2<boolean, pa.IReadonlyDictionary<api.Part>>(
                             libs.process.call<boolean>(
                                 `git -C ${projectDir.path} diff --exit-code && git -C ${projectDir.path} log origin/master..master --exit-code`,
                                 {
@@ -107,7 +109,7 @@ export function getData(
     
                                                 function resolveDependencies(rawJSONDependencies: any) {
                                                     return libs.async.dictionary<api.Depencency>(
-                                                        libs.async.createDictionary<string>(rawJSONDependencies === undefined ? {} : rawJSONDependencies).map((v, k) => {
+                                                        pl.createDictionary<string>(rawJSONDependencies === undefined ? {} : rawJSONDependencies).map((v, k) => {
                                                             return libs.async.rewrite(
                                                                 registryCache.getEntry(k),
                                                                 ($) => {
@@ -123,7 +125,7 @@ export function getData(
                                                 }
     
                                                 return libs.async.rewrite(
-                                                    libs.async.tuple3<asyncAPI.IDictionary<api.Depencency>, asyncAPI.IDictionary<api.Depencency>, api.RemoteData | null>(
+                                                    libs.async.tuple3<pa.IReadonlyDictionary<api.Depencency>, pa.IReadonlyDictionary<api.Depencency>, api.RemoteData | null>(
                                                         resolveDependencies(pkg.dependencies),
                                                         resolveDependencies(pkg.devDependencies),
                                                         pkg.name === undefined
@@ -155,6 +157,10 @@ export function getData(
                                         )
                                     }
                                 },
+                                ($) => {
+                                    pr.logError(`!!! ${$[0]}`)
+                                    return null
+                                },
                             )
     
                         ),
@@ -166,6 +172,10 @@ export function getData(
                         },
                     )
     
+                },
+                ($) => {
+                    pr.logError(`!!! ${$[0]}`)
+                    return null
                 }
             ),
             (projects) => {

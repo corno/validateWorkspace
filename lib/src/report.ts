@@ -1,5 +1,6 @@
 
-import * as asyncAPI from "pareto-async-api"
+import * as pa from "pareto-lang-api"
+import * as pl from "pareto-lang-lib"
 import * as api from "pareto-validate-workspace-api"
 
 const red = "\x1b[31m"
@@ -9,11 +10,11 @@ const cyan = "\x1b[36m"
 const reset = "\x1b[0m"
 
 type Overview = {
-    projects: asyncAPI.IDictionary<Project>
+    projects: pa.IReadonlyDictionary<Project>
 }
 
 type Project = {
-    parts: asyncAPI.IDictionary<Part>
+    parts: pa.IReadonlyDictionary<Part>
     gitClean: boolean
     isClean: boolean
 }
@@ -31,8 +32,8 @@ type Part = {
     contentFingerprint: null | string
     status: PartStatus
     dependenciesClean: boolean
-    dependencies: asyncAPI.IDictionary<Dependency>
-    devDependencies: asyncAPI.IDictionary<Dependency>
+    dependencies: pa.IReadonlyDictionary<Dependency>
+    devDependencies: pa.IReadonlyDictionary<Dependency>
 }
 
 type DepencencyStatus =
@@ -55,28 +56,13 @@ export function report() {
         }
     ) {
 
-
-        function tempCreateEmptyDictionary<T>(): asyncAPI.IDictionary<T> {
-            return {
-                forEach: () => {
-
-                },
-                map: () => {
-                    return tempCreateEmptyDictionary()
-                },
-                toArray: () => {
-                    return []
-                },
-            }
-        }
-
         const o: Overview = {
             projects: res.projects.map((project, projectName) => {
-                const parts: asyncAPI.IDictionary<Part> = project.parts.map<Part>((part, partName) => {
+                const parts: pa.IReadonlyDictionary<Part> = project.parts.map<Part>((part, partName) => {
                     if (part.packageData === null) {
                         return {
-                            dependencies: tempCreateEmptyDictionary(),
-                            devDependencies: tempCreateEmptyDictionary(),
+                            dependencies: pl.createDictionary({}),
+                            devDependencies: pl.createDictionary({}),
                             dependenciesClean: true,
                             status: ["missing package", {}],
                             version: null,
@@ -85,7 +71,7 @@ export function report() {
                             isPublic: part.isPublic,
                         }
                     }
-                    function processDeps(deps: asyncAPI.IDictionary<api.Depencency>): asyncAPI.IDictionary<Dependency> {
+                    function processDeps(deps: pa.IReadonlyDictionary<api.Depencency>): pa.IReadonlyDictionary<Dependency> {
                         return deps.map<Dependency>((v, k) => {
 
                             return {
@@ -154,15 +140,15 @@ export function report() {
         }
 
 
-        o.projects.forEach((project, projectName) => {
-            console.log(`${projectName} ${project.gitClean ? "" : `${red}open gitchanges${reset}`}`)
-            project.parts.forEach((part, key) => {
-                console.log(`\t${key} ${part.version === null ? "" : part.version} ${part.contentFingerprint === null ? "" : part.contentFingerprint} ${part.status[0] === "clean" ? "" : `${red}${part.status[0]}${reset}`}`)
-                part.dependencies.forEach((v, k) => {
-                    console.log(`\t\t${k} -> ${v.version} ${v.status[0] === "clean" ? "" : `${red}${v.status[0]}${reset}`}`)
+        o.projects.toArray().forEach((project) => {
+            console.log(`${project.key} ${project.value.gitClean ? "" : `${red}open gitchanges${reset}`}`)
+            project.value.parts.toArray().forEach((part) => {
+                console.log(`\t${part.key} ${part.value.version === null ? "" : part.value.version} ${part.value.contentFingerprint === null ? "" : part.value.contentFingerprint} ${part.value.status[0] === "clean" ? "" : `${red}${part.value.status[0]}${reset}`}`)
+                part.value.dependencies.toArray().forEach((v) => {
+                    console.log(`\t\t${v.key} -> ${v.value.version} ${v.value.status[0] === "clean" ? "" : `${red}${v.value.status[0]}${reset}`}`)
                 })
-                part.devDependencies.forEach((v, k) => {
-                    console.log(`\t\t${k}(dev) -> ${v.version} ${v.status[0] === "clean" ? "" : `${red}${v.status[0]}${reset}`}`)
+                part.value.devDependencies.toArray().forEach((v) => {
+                    console.log(`\t\t${v.key}(dev) -> ${v.value.version} ${v.value.status[0] === "clean" ? "" : `${red}${v.value.status[0]}${reset}`}`)
                 })
             })
         })
@@ -174,27 +160,27 @@ export function report() {
         console.log(`digraph G {`)
         console.log(`\trankdir="LR"`)
         
-        o.projects.forEach((project, projectName) => {
+        o.projects.toArray().forEach((project) => {
             console.log(`\tsubgraph cluster_${i++} {`)
 
-            project.parts.forEach((part, partName) => {
-                if (part.isPublic) {
-                    console.log(`\t\t"${projectName}-${partName}" [ color="${part.status[0] !== "clean" || !part.dependenciesClean ? `red` : `green`}"${partName === "api" ? `, style="filled"` : ""} ]`)
+            project.value.parts.toArray().forEach((part) => {
+                if (part.value.isPublic) {
+                    console.log(`\t\t"${project.key}-${part.key}" [ color="${part.value.status[0] !== "clean" || !part.value.dependenciesClean ? `red` : `green`}"${part.key === "api" ? `, style="filled"` : ""} ]`)
                 }
             })
             console.log(`\t}`)
         })
-        o.projects.forEach((project, projectName) => {
+        o.projects.toArray().forEach((project) => {
 
-            project.parts.forEach((part, partName) => {
-                if (part.isPublic) {
-                    part.dependencies.forEach((v, depName) => {
-                        if (depName !== "pareto-lang-api" && depName !== "pareto-lang-lib") {
-                            console.log(`\t"${projectName}-${partName}" -> "${depName}"`)
+            project.value.parts.toArray().forEach((part, partName) => {
+                if (part.value.isPublic) {
+                    part.value.dependencies.toArray().forEach((v) => {
+                        if (v.key !== "pareto-lang-api" && v.key !== "pareto-lang-lib") {
+                            console.log(`\t"${project.key}-${partName}" -> "${v.key}"`)
                         }
                     })
-                    part.devDependencies.forEach((v, depName) => {
-                        console.log(`\t"${projectName}-${partName}" -> "${depName}"`)
+                    part.value.devDependencies.toArray().forEach((v) => {
+                        console.log(`\t"${project.key}-${part.key}" -> "${v.key}"`)
 
                     })
                 }
