@@ -1,4 +1,4 @@
-import * as asyncAPI from "pareto-async-api"
+import * as pa from "pareto-lang-api"
 
 export type Part = {
     isPublic: boolean
@@ -7,19 +7,19 @@ export type Part = {
 
 export type Project = {
     gitClean: boolean
-    parts: asyncAPI.IDictionary<Part>
+    parts: pa.IReadonlyDictionary<Part>
 }
 
 export type Overview = {
-    projects: asyncAPI.IDictionary<Project>
+    projects: pa.IReadonlyDictionary<Project>
 }
 
 export type PackageData = {
     name: string | null,
     version: string | null,
     contentFingerprint: string | null,
-    dependencies: asyncAPI.IDictionary<Depencency>
-    devDependencies: asyncAPI.IDictionary<Depencency>
+    dependencies: pa.IReadonlyDictionary<Depencency>
+    devDependencies: pa.IReadonlyDictionary<Depencency>
     remote: RemoteData | null
 }
 

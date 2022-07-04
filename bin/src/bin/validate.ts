@@ -10,37 +10,37 @@ import * as fs from "pareto-filesystem-lib"
 import * as process from "pareto-process-lib"
 
 
-pr.runProgram(($$) => {
+// pr.runProgram(($$) => {
 
-    const rootDir = $$.argument
+//     const rootDir = $$.argument
 
-    if (rootDir === undefined) {
-        throw new Error("Missing param")
-    }
+//     if (rootDir === undefined) {
+//         throw new Error("Missing param")
+//     }
 
-    const $ = init(
-        {
-            https: https.init(),
-            async: async.init(),
-            process: process.init(),
-            fs: fs.init(async.init()),
-        }
-    )
+//     const $ = init(
+//         {
+//             https: https.init(),
+//             async: async.init(),
+//             process: process.init(),
+//             fs: fs.init(async.init()),
+//         }
+//     )
 
-    $.getData(
-        rootDir,
-        (msg) => {
-            pr.logError(msg)
-        }
-    ).execute((res) => {
-        $.report(
-            res,
-            {
-                log: (msg) => {
-                    pr.log(msg)
-                }
-            },
-        )
-    })
+//     $.getData(
+//         rootDir,
+//         (msg) => {
+//             pr.logError(msg)
+//         }
+//     ).execute((res) => {
+//         $.report(
+//             res,
+//             {
+//                 log: (msg) => {
+//                     pr.log(msg)
+//                 }
+//             },
+//         )
+//     })
 
-})
+// })
