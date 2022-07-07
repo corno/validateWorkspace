@@ -8,7 +8,7 @@
     "pareto-lang-lib": "^0.8.0",
     "pareto-process-api": "^0.5.0",
     "pareto-runtime": "^0.24.0",
-    "pareto-validate-workspace-api": "^0.5.0"
+    "pareto-validate-workspace-api": "^0.6.0"
   },
   "version": "0.3.0",
   "author": "Corno",
@@ -30,5 +30,5 @@
     "url": "git+https://github.com/corno/pareto-validate-workspace.git"
   },
   "types": "dist/index.d.ts",
-  "content-fingerprint": "ffd7d4561c732071095e05de8bb345335c4c7b06"
+  "content-fingerprint": "ef93462be1516995df4cea3b7f8d9b6868d49e0b"
 }
