@@ -4,6 +4,7 @@ import * as api from "pareto-validate-workspace-api"
 import * as pa from "pareto-lang-api"
 import * as pl from "pareto-lang-lib"
 import * as asyncAPI from "pareto-async-api"
+import * as asyncFunctionsAPI from "pareto-async-functions-api"
 import * as httpsAPI from "pareto-https-api"
 import * as fsAPI from "pareto-filesystem-api"
 import * as processAPI from "pareto-process-api"
@@ -14,7 +15,7 @@ import * as pr from "pareto-runtime"
 export function getData(
     libs: {
         fs: fsAPI.API
-        async: asyncAPI.API,
+        async: asyncFunctionsAPI.API,
         https: httpsAPI.API,
         process: processAPI.API,
     },
@@ -59,25 +60,24 @@ export function getData(
                                         return {
                                             latestVersion: latest,
                                             contentFingerprint: json["versions"][latest]["content-fingerprint"],
-    
+
                                         }
                                     }
                                 }
                             })()
                         )
-    
+
                     }
-    
+
                 )
             }
         )
-    
+
         return libs.async.rewrite<api.Overview, pa.IReadonlyDictionary<api.Project>>(
             libs.fs.directory<api.Project>(
-                rootDir,
+                [rootDir],
                 (projectDir) => {
-                    return libs.async.rewrite<api.Project, asyncAPI.Tuple2Result<boolean, pa.IReadonlyDictionary<api.Part>>>(
-                        libs.async.tuple2<boolean, pa.IReadonlyDictionary<api.Part>>(
+                    return libs.async.tuple2(
                             libs.process.call<boolean>(
                                 `git -C ${projectDir.path} diff --exit-code && git -C ${projectDir.path} log origin/master..master --exit-code`,
                                 {
@@ -90,7 +90,7 @@ export function getData(
                                 },
                             ),
                             libs.fs.directory<api.Part>(
-                                projectDir.path,
+                                [projectDir.path],
                                 (partDir) => {
                                     if ([
                                         "pareto",
@@ -106,7 +106,7 @@ export function getData(
                                             [partDir.path, `package.json`],
                                             (data) => {
                                                 const pkg = pr.JSONparse(data)
-    
+
                                                 function resolveDependencies(rawJSONDependencies: any) {
                                                     return libs.async.dictionary<api.Depencency>(
                                                         pl.createDictionary<string>(rawJSONDependencies === undefined ? {} : rawJSONDependencies).map((v, k) => {
@@ -119,33 +119,31 @@ export function getData(
                                                                     }
                                                                 }
                                                             )
-    
+
                                                         })
                                                     )
                                                 }
-    
-                                                return libs.async.rewrite(
-                                                    libs.async.tuple3<pa.IReadonlyDictionary<api.Depencency>, pa.IReadonlyDictionary<api.Depencency>, api.RemoteData | null>(
+
+                                                return libs.async.tuple3(
                                                         resolveDependencies(pkg.dependencies),
                                                         resolveDependencies(pkg.devDependencies),
                                                         pkg.name === undefined
                                                             ? libs.async.value(null)
-                                                            : registryCache.getEntry(pkg.name)
-    
-                                                    ),
-                                                    ($): api.Part => {
-                                                        return {
-                                                            isPublic: ["api", "lib", "bin"].indexOf(partDir.name) !== -1,
-                                                            packageData: {
-                                                                name: pkg.name === undefined ? null : pkg.name,
-                                                                version: pkg.version === undefined ? null : pkg.version,
-                                                                contentFingerprint: pkg["content-fingerprint"] === undefined ? null : pkg["content-fingerprint"],
-                                                                dependencies: $.first,
-                                                                devDependencies: $.second,
-                                                                remote: $.third,
-                                                            }
-                                                        }
-                                                    }
+                                                            : registryCache.getEntry(pkg.name),
+                                                            ($): api.Part => {
+                                                                return {
+                                                                    isPublic: ["api", "lib", "bin"].indexOf(partDir.name) !== -1,
+                                                                    packageData: {
+                                                                        name: pkg.name === undefined ? null : pkg.name,
+                                                                        version: pkg.version === undefined ? null : pkg.version,
+                                                                        contentFingerprint: pkg["content-fingerprint"] === undefined ? null : pkg["content-fingerprint"],
+                                                                        dependencies: $.first,
+                                                                        devDependencies: $.second,
+                                                                        remote: $.third,
+                                                                    }
+                                                                }
+                                                            },
+
                                                 )
                                             },
                                             () => {
@@ -161,17 +159,16 @@ export function getData(
                                     pr.logError(`!!! ${$[0]}`)
                                     return null
                                 },
-                            )
-    
-                        ),
-                        (tuple) => {
-                            return {
-                                gitClean: tuple.first,
-                                parts: tuple.second
-                            }
-                        },
-                    )
-    
+                            ),
+                            (tuple) => {
+                                return {
+                                    gitClean: tuple.first,
+                                    parts: tuple.second
+                                }
+                            },
+
+                        )
+
                 },
                 ($) => {
                     pr.logError(`!!! ${$[0]}`)
@@ -185,6 +182,6 @@ export function getData(
             }
         )
     }
-    
+
     return getDataImp
 }

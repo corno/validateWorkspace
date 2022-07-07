@@ -1,7 +1,7 @@
 import { API } from "pareto-validate-workspace-api";
 import { getData } from "./getData";
 
-import * as async from "pareto-async-api"
+import * as async from "pareto-async-functions-api"
 import * as https from "pareto-https-api"
 import * as fs from "pareto-filesystem-api"
 import * as prcs from "pareto-process-api"
