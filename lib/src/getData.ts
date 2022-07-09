@@ -95,6 +95,7 @@ export function getData(
                                     if ([
                                         "pareto",
                                         "dev",
+                                        "res",
                                         "lib",
                                         "api",
                                         "bin",
@@ -132,7 +133,7 @@ export function getData(
                                                             : registryCache.getEntry(pkg.name),
                                                             ($): api.Part => {
                                                                 return {
-                                                                    isPublic: ["api", "lib", "bin"].indexOf(partDir.name) !== -1,
+                                                                    isPublic: ["api", "lib", "res", "bin"].indexOf(partDir.name) !== -1,
                                                                     packageData: {
                                                                         name: pkg.name === undefined ? null : pkg.name,
                                                                         version: pkg.version === undefined ? null : pkg.version,
@@ -148,7 +149,7 @@ export function getData(
                                             },
                                             () => {
                                                 return libs.async.value({
-                                                    isPublic: ["api", "lib", "bin"].indexOf(partDir.name) !== 1,
+                                                    isPublic: ["api", "lib", "res", "bin"].indexOf(partDir.name) !== 1,
                                                     packageData: null
                                                 })
                                             }
