@@ -1,8 +1,8 @@
 interface Array<T> {
     forEach(callback: (e: T, i: number) => void): void
     map<RT>(callback: (e: T, i: number) => RT): RT[]
-    //pop: () => T
     //push(v: T): void
+    //pop: () => T
     //includes(v: T): boolean
     //length: number
     //join(separator: string): string
@@ -38,11 +38,3 @@ interface String {
 interface Error {
 
 }
-
-declare function isNaN(v: any): boolean
-
-interface ErrorConstructor {
-    new(message?: string): Error
-}
-
-declare let Error: ErrorConstructor;
