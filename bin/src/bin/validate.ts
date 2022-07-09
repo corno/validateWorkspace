@@ -4,10 +4,10 @@ import { init } from "pareto-validate-workspace-lib"
 
 import * as pr from "pareto-runtime"
 
-import * as https from "pareto-https-lib"
+import * as https from "pareto-https-res"
 import * as async from "pareto-async-functions-lib"
-import * as fs from "pareto-filesystem-lib"
-import * as process from "pareto-process-lib"
+import * as fs from "pareto-filesystem-res"
+import * as process from "pareto-process-res"
 
 
 pr.runProgram(($$) => {
