@@ -1,6 +1,7 @@
 interface Array<T> {
     reduce<T> (func: (a: T, b: T) => T, init: T): T
     indexOf: (a: string) => number
+    push(a: T): void
 }
 
 interface String {
