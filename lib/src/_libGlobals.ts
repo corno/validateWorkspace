@@ -1,8 +1,8 @@
 interface Array<T> {
-    //pop: () => T
-    push(v: T): void
     forEach(callback: (e: T, i: number) => void): void
     map<RT>(callback: (e: T, i: number) => RT): RT[]
+    //pop: () => T
+    //push(v: T): void
     //includes(v: T): boolean
     //length: number
     //join(separator: string): string
@@ -10,7 +10,7 @@ interface Array<T> {
     //concat(array: T[]): T[]
     //slice(position: number): T[]
     //sort(): T[]
-    [n: number]: T
+    //[n: number]: T
 
 }
 interface Boolean { }
@@ -38,7 +38,6 @@ interface String {
 interface Error {
 
 }
-//export const x = 5
 
 declare function isNaN(v: any): boolean
 
