@@ -1,4 +1,4 @@
-import * as pa from "pareto-lang-api"
+import * as pa from "pareto-api-core"
 
 export type Part = {
     isPublic: boolean

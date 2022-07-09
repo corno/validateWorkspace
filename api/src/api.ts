@@ -1,10 +1,10 @@
 import { Overview } from "./types"
-import * as asyncAPI from "pareto-async-api"
+import * as pa from "pareto-api-core"
 
 export type GetData = (
     rootDir: string,
     error: (message: string) => void,
-) => asyncAPI.IAsync<Overview>
+) => pa.IAsync<Overview>
 
 export type Report = (
     res: Overview,

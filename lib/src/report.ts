@@ -159,13 +159,22 @@ export function report() {
         console.log(``)
         console.log(`digraph G {`)
         console.log(`\trankdir="LR"`)
-        
+
+        const includedNodes: string[] = []
+
+        o.projects.toArray().forEach((project) => {
+            project.value.parts.toArray().forEach((part) => {
+                includedNodes.push(`${project.key}-${part.key}`)
+            })
+        })
         o.projects.toArray().forEach((project) => {
             console.log(`\tsubgraph cluster_${i++} {`)
-
+            if (!project.value.isClean) {
+                console.log(`\t\tgraph[color="red"]`)
+            }
             project.value.parts.toArray().forEach((part) => {
                 if (part.value.isPublic) {
-                    console.log(`\t\t"${project.key}-${part.key}" [ color="${part.value.status[0] !== "clean" || !part.value.dependenciesClean ? `red` : `green`}"${part.key === "api" ? `, style="filled"` : ""} ]`)
+                    console.log(`\t\t"${project.key}-${part.key}" [ color="${part.value.status[0] !== "clean" || !part.value.dependenciesClean ? `red` : `green`}"${part.key === "api" ? `, style="filled"` : part.key === "res" ? `, style="diagonals"` : ""} ]`)
                 }
             })
             console.log(`\t}`)
@@ -175,12 +184,21 @@ export function report() {
             project.value.parts.toArray().forEach((part) => {
                 if (part.value.isPublic) {
                     part.value.dependencies.toArray().forEach((v) => {
-                        if (v.key !== "pareto-api-core" && v.key !== "pareto-lib-core") {
+                        if (includedNodes.indexOf(v.key) === -1) {
+                            if (v.key !== "pareto-api-core" && v.key !== "pareto-lib-core") {
+                                //create a leaf node
+                                const depname = `${project.key}-${part.key}--${v.key}`
+                                console.log(`\t"${depname}" [label= "${v.key}"]`)
+                                console.log(`\t"${project.key}-${part.key}" -> "${depname}"`)
+                            }
+                        } else {
                             console.log(`\t"${project.key}-${part.key}" -> "${v.key}"`)
                         }
                     })
                     part.value.devDependencies.toArray().forEach((v) => {
-                        console.log(`\t"${project.key}-${part.key}" -> "${v.key}"`)
+                        const depname = `${project.key}-${part.key}--${v.key}`
+                        console.log(`\t"${depname}" [label= "${v.key}"]`)
+                        console.log(`\t"${project.key}-${part.key}" -> "${depname}"`)
 
                     })
                 }
