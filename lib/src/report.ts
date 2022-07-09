@@ -175,7 +175,7 @@ export function report() {
             project.value.parts.toArray().forEach((part) => {
                 if (part.value.isPublic) {
                     part.value.dependencies.toArray().forEach((v) => {
-                        if (v.key !== "pareto-lang-api" && v.key !== "pareto-lang-lib") {
+                        if (v.key !== "pareto-api-core" && v.key !== "pareto-lib-core") {
                             console.log(`\t"${project.key}-${part.key}" -> "${v.key}"`)
                         }
                     })
