@@ -18,7 +18,7 @@
     "url": "git+https://github.com/corno/pareto-validate-workspace.git"
   },
   "types": "dist/index.d.ts",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "dependencies": {
     "pareto-api-core": "^0.1.0"
   },
