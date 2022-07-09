@@ -5,7 +5,7 @@
     "pareto-https-res": "^0.11.0",
     "pareto-process-res": "^0.9.0",
     "pareto-runtime": "^0.25.0",
-    "pareto-validate-workspace-lib": "^0.6.0"
+    "pareto-validate-workspace-lib": "^0.7.0"
   },
   "author": "Corno",
   "files": [
@@ -30,5 +30,5 @@
   "bin": {
     "validate-workspace": "dist/bin/validate.js"
   },
-  "content-fingerprint": "4dfd295d0801dba9d38d83a1f546492f8bd07edd"
+  "content-fingerprint": "91f9e56854a0045eebe285d81e317d03df266d11"
 }
