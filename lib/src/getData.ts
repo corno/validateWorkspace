@@ -1,9 +1,8 @@
 
 import * as api from "pareto-validate-workspace-api"
 
-import * as pa from "pareto-lang-api"
-import * as pl from "pareto-lang-lib"
-import * as asyncAPI from "pareto-async-api"
+import * as pa from "pareto-api-core"
+import * as pl from "pareto-lib-core"
 import * as asyncFunctionsAPI from "pareto-async-functions-api"
 import * as httpsAPI from "pareto-https-api"
 import * as fsAPI from "pareto-filesystem-api"
@@ -23,7 +22,7 @@ export function getData(
     function getDataImp(
         rootDir: string,
         error: (message: string) => void,
-    ): asyncAPI.IAsync<api.Overview> {
+    ): pa.IAsync<api.Overview> {
         const registryCache = libs.async.createCache(
             (key) => {
                 let data = ""

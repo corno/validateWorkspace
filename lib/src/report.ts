@@ -1,6 +1,6 @@
 
-import * as pa from "pareto-lang-api"
-import * as pl from "pareto-lang-lib"
+import * as pa from "pareto-api-core"
+import * as pl from "pareto-lib-core"
 import * as api from "pareto-validate-workspace-api"
 
 const red = "\x1b[31m"

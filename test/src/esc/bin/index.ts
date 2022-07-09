@@ -6,7 +6,7 @@ import * as pr from "pareto-runtime"
 
 import * as https from "pareto-https-lib"
 import * as async from "pareto-async-functions-lib"
-import * as fs from "pareto-filesystem-lib"
+import * as fs from "pareto-filesystem-res"
 import * as process from "pareto-process-lib"
 
 
